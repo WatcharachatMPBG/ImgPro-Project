@@ -6,9 +6,7 @@ img = cv2.imread('testfile/testimage.jpg')
 ret,binimg = cv2.threshold(img,127,255,cv2.THRESH_BINARY) #turns image into binary
 height,width,channel = img.shape
 
-line_height_estimate = 60
-lines_begin = []
-lines_end = []
+lines = []
 
 blotcount = 0
 beginsignal = 1
@@ -18,19 +16,35 @@ for x in range(height):
         if binimg[x,y,0] == 0:
             blotcount += 1
     if blotcount > 0 and beginsignal == 1:
-        lines_begin.append(x)
+        lines.append(x)
         beginsignal = 0
     elif blotcount == 0 and beginsignal == 0:
-        lines_end.append(x)
+        lines.append(x)
         beginsignal = 1
     blotcount = 0
 
 
 #print(lines_begin[0])
+margin = 3
+linebefore = 0
+thisline = 0
 
-for x in lines_begin:
-    cv2.line(img,(0,x),(width,x),(0,250,0),1)
-for x in lines_end:
+filteredlines = []
+
+for x in lines:
+    if linebefore == 0 and thisline == 0:
+        thisline = x
+    elif thisline != 0 and linebefore == 0:
+        filteredlines.append(thisline)
+        linebefore = thisline
+        thisline = x
+    else:
+        if thisline - linebefore >= margin and x - thisline >= margin:
+            filteredlines.append(thisline)
+        linebefore = thisline
+        thisline = x
+filteredlines.append(thisline)
+for x in filteredlines:
     cv2.line(img,(0,x),(width,x),(250,0,0),1)
 
 
