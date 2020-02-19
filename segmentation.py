@@ -2,10 +2,12 @@ import numpy as np
 import cv2
 import matplotlib.pyplot as plt
 
+#image preprocessing
 img = cv2.imread('testfile/testimage.jpg')
 ret,binimg = cv2.threshold(img,127,255,cv2.THRESH_BINARY) #turns image into binary
 height,width,channel = img.shape
 
+#finding horizontal partition
 lines = []
 
 blotcount = 0
@@ -25,6 +27,7 @@ for x in range(height):
 
 
 #print(lines_begin[0])
+#discarding close lines
 margin = 3
 linebefore = 0
 thisline = 0
@@ -44,9 +47,9 @@ for x in lines:
         linebefore = thisline
         thisline = x
 filteredlines.append(thisline)
+#results are stored in filteredlines
 for x in filteredlines:
     cv2.line(img,(0,x),(width,x),(250,0,0),1)
-
 
 
 cv2.imshow('image',img)
