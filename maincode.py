@@ -65,8 +65,8 @@ def horizontal_cut(img):
         else:
             imgCrop = binimg[cropbegin-1:x+1,0:width]
             flag = cv2.imwrite('testfile/horizontalcutoutput/cropimage_{}.png'.format(cnt), imgCrop)
-            print(cnt,'H')
-            print(flag)
+            #print(cnt,'H')
+            #print(flag)
             cnt += 1
             cropbegin = 0
     cv2.imwrite('testfile/paragraphs_out.png',img)
