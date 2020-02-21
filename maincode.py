@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import argparse
 import os
 import shutil
+import os
 
 
 def horizontal_cut(img):
@@ -73,19 +74,22 @@ def horizontal_cut(img):
     #cv2.imshow('image',img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
-    return 'testfile/horizontalcutoutput'
+    return 'testfile/horizontalcutoutput/'
 
 def vertical_cut(horizontalcutimg_path):
 
     cntimg = 0
     path = horizontalcutimg_path
-    for f in path:
+    for file in os.listdir(path):
+        if file.endswith(".png"):
+            pass
+        else:
+            break
         #image preprocessing
         shutil.rmtree('testfile/verticalcutoutput/line{}'.format(cntimg),ignore_errors=True)
 
         os.makedirs('testfile/verticalcutoutput/line{}'.format(cntimg),exist_ok=True)
         binimg = cv2.imread('testfile/horizontalcutoutput/cropimage_{}.png'.format(cntimg))
-        
         height,width,channel = binimg.shape
 
         #finding vertical partition
@@ -141,8 +145,8 @@ def vertical_cut(horizontalcutimg_path):
             else:
                 imgCrop = binimg[0:height,cropbegin-1:x+1]
                 flag = cv2.imwrite('testfile/verticalcutoutput/line{}/cropimage_{}.png'.format(cntimg,cnt), imgCrop)
-                print(cnt,'V')
-                print(flag)
+                #print(cnt,'V')
+                #print(flag)
                 cnt += 1
                 cropbegin = 0
         cv2.imwrite('testfile/paragraphs_out.png',binimg)
