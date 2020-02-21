@@ -3,9 +3,9 @@ import cv2
 import matplotlib.pyplot as plt
 import os
 
-cntimg = 3
+cntimg = 4
 #image preprocessing
-os.makedirs('testfile/verticalcutoutput/line{}'.format(cntimg))
+os.makedirs('testfile/verticalcutoutput/line{}'.format(cntimg),exist_ok=True)
 binimg = cv2.imread('testfile/horizontalcutoutput/cropimage_{}.png'.format(cntimg))
 
 height,width,channel = binimg.shape
@@ -67,7 +67,7 @@ for x in filteredlines:
         print(flag)
         cnt += 1
         cropbegin = 0
-cv2.imwrite('testfile/paragraphs_out.png',img)
+cv2.imwrite('testfile/paragraphs_out.png',binimg)
 
 #cv2.imshow('image',binimg)
 cv2.waitKey(0)

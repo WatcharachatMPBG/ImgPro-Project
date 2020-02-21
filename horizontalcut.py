@@ -10,9 +10,8 @@ args = vars(ap.parse_args())
 
 img = cv2.imread(args["image"])
 ret,binimg = cv2.threshold(img,127,255,cv2.THRESH_BINARY) #turns image into binary
-height,width,channel = img.shape
-
 #finding horizontal partition
+height,width,channel = binimg.shape
 lines = []
 
 blotcount = 0
@@ -69,7 +68,7 @@ for x in filteredlines:
         print(flag)
         cnt += 1
         cropbegin = 0
-cv2.imwrite('testfile/paragraphs_out.png',img)
+#cv2.imwrite('testfile/paragraphs_out.png',img)
 
 #cv2.imshow('image',img)
 cv2.waitKey(0)
