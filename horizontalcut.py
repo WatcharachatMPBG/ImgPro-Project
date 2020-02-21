@@ -9,7 +9,8 @@ ap.add_argument("-i", "--image", required = True, help = "Path to the image")
 args = vars(ap.parse_args())
 
 img = cv2.imread(args["image"])
-ret,binimg = cv2.threshold(img,127,255,cv2.THRESH_BINARY) #turns image into binary
+img = cv2.fastNlMeansDenoisingColored(img,None,10,10,7,21) #eliminnates noise
+ret,binimg = cv2.threshold(img,125,255,cv2.THRESH_BINARY) #turns image into binary
 #finding horizontal partition
 height,width,channel = binimg.shape
 lines = []
@@ -52,10 +53,10 @@ for x in lines:
         thisline = x
 filteredlines.append(thisline)
 #results are stored in filteredlines
-'''
+
 for x in filteredlines:
     cv2.line(img,(0,x),(width,x),(250,0,0),1)
-'''
+
 cropbegin = 0
 cnt = 0
 for x in filteredlines:
@@ -68,7 +69,7 @@ for x in filteredlines:
         print(flag)
         cnt += 1
         cropbegin = 0
-#cv2.imwrite('testfile/paragraphs_out.png',img)
+cv2.imwrite('testfile/paragraphs_out.png',img)
 
 #cv2.imshow('image',img)
 cv2.waitKey(0)
