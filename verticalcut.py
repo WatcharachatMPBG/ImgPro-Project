@@ -1,39 +1,37 @@
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
-import argparse
+import os
+
+cntimg = 3
 #image preprocessing
+os.makedirs('testfile/verticalcutoutput/line{}'.format(cntimg))
+binimg = cv2.imread('testfile/horizontalcutoutput/cropimage_{}.png'.format(cntimg))
 
-ap = argparse.ArgumentParser()
-ap.add_argument("-i", "--image", required = True, help = "Path to the image")
-args = vars(ap.parse_args())
+height,width,channel = binimg.shape
 
-img = cv2.imread(args["image"])
-ret,binimg = cv2.threshold(img,127,255,cv2.THRESH_BINARY) #turns image into binary
-height,width,channel = img.shape
-
-#finding horizontal partition
+#finding vertical partition
 lines = []
 
 blotcount = 0
 beginsignal = 1
 
-for x in range(height):
-    for y in range(width):
+for y in range(width):
+    for x in range(height):
         if binimg[x,y,0] == 0:
             blotcount += 1
     if blotcount > 0 and beginsignal == 1:
-        lines.append(x)
+        lines.append(y)
         beginsignal = 0
     elif blotcount == 0 and beginsignal == 0:
-        lines.append(x)
+        lines.append(y)
         beginsignal = 1
     blotcount = 0
 
 
 #print(lines_begin[0])
 #discarding close lines
-margin = 3
+margin = 0
 linebefore = 0
 thisline = 0
 
@@ -55,7 +53,7 @@ filteredlines.append(thisline)
 #results are stored in filteredlines
 '''
 for x in filteredlines:
-    cv2.line(img,(0,x),(width,x),(250,0,0),1)
+    cv2.line(binimg,(x,0),(x,height),(250,0,0),1)
 '''
 cropbegin = 0
 cnt = 0
@@ -63,17 +61,14 @@ for x in filteredlines:
     if cropbegin == 0:
         cropbegin = x
     else:
-        imgCrop = binimg[cropbegin-1:x+1,0:width]
-        flag = cv2.imwrite('testfile/horizontalcutoutput/cropimage_{}.png'.format(cnt), imgCrop)
+        imgCrop = binimg[0:height,cropbegin-1:x+1]
+        flag = cv2.imwrite('testfile/verticalcutoutput/line{}/cropimage_{}.png'.format(cntimg,cnt), imgCrop)
         print(cnt)
         print(flag)
         cnt += 1
         cropbegin = 0
 cv2.imwrite('testfile/paragraphs_out.png',img)
 
-#cv2.imshow('image',img)
+#cv2.imshow('image',binimg)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
-
-
-
