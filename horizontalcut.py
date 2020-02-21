@@ -59,7 +59,7 @@ for x in filteredlines:
         cropbegin = x
     else:
         imgCrop = binimg[cropbegin-1:x+1,0:width]
-        flag = cv2.imwrite('testfile/output/cropimage_{}.png'.format(cnt), imgCrop)
+        flag = cv2.imwrite('testfile/horizontalcutoutput/cropimage_{}.png'.format(cnt), imgCrop)
         print(cnt)
         print(flag)
         cnt += 1
