@@ -48,13 +48,27 @@ for x in lines:
         thisline = x
 filteredlines.append(thisline)
 #results are stored in filteredlines
+'''
 for x in filteredlines:
     cv2.line(img,(0,x),(width,x),(250,0,0),1)
+'''
+cropbegin = 0
+cnt = 0
+for x in filteredlines:
+    if cropbegin == 0:
+        cropbegin = x
+    else:
+        imgCrop = binimg[cropbegin-1:x+1,0:width]
+        flag = cv2.imwrite('testfile/output/cropimage_{}.png'.format(cnt), imgCrop)
+        print(cnt)
+        print(flag)
+        cnt += 1
+        cropbegin = 0
+cv2.imwrite('testfile/paragraphs_out.png',img)
 
-
-cv2.imshow('image',img)
+#cv2.imshow('image',img)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 
-cv2.imwrite('testfile/paragraphs_out.png',img)
+
 
