@@ -2,9 +2,13 @@ import numpy as np
 import cv2
 import matplotlib.pyplot as plt
 import os
+import shutil
 
-cntimg = 4
+cntimg = 10
 #image preprocessing
+
+shutil.rmtree('testfile/verticalcutoutput/line{}'.format(cntimg),ignore_errors=True)
+
 os.makedirs('testfile/verticalcutoutput/line{}'.format(cntimg),exist_ok=True)
 binimg = cv2.imread('testfile/horizontalcutoutput/cropimage_{}.png'.format(cntimg))
 
