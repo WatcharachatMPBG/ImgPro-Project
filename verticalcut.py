@@ -22,7 +22,7 @@ beginsignal = 1
 
 for y in range(width):
     for x in range(height):
-        if binimg[x,y,0] == 0:
+        if binimg[x,y,0] == 255:
             blotcount += 1
     if blotcount > 0 and beginsignal == 1:
         lines.append(y)

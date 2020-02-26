@@ -9,9 +9,10 @@ import shutil
 import os
 
 def horizontal_cut(img):
+    img = cv2.bitwise_not(img) #inverts image
+    #img = cv2.fastNlMeansDenoisingColored(img,None,10,10,7,21) #eliminnates noise
+    ret,binimg = cv2.threshold(img,127,255,cv2.THRESH_BINARY) #turns image into binary
     
-    img = cv2.fastNlMeansDenoisingColored(img,None,10,10,7,21) #eliminnates noise
-    ret,binimg = cv2.threshold(img,125,255,cv2.THRESH_BINARY) #turns image into binary
     #finding horizontal partition
     height,width,channel = binimg.shape
     lines = []
@@ -21,7 +22,7 @@ def horizontal_cut(img):
 
     for x in range(height):
         for y in range(width):
-            if binimg[x,y,0] == 0:
+            if binimg[x,y,0] == 255:
                 blotcount += 1
         if blotcount > 0 and beginsignal == 1:
             lines.append(x)
@@ -83,7 +84,7 @@ def cv_imread(filePath):
 
 def vertical_cut(horizontalcutimg_path):
     thaistr = "กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรฤลฦวศษสหฬอฮฯะาเแโใไๅๆ"
-
+    setcnt = 0
     cntimg = 0
     cnt = 0
     path = horizontalcutimg_path
@@ -107,7 +108,7 @@ def vertical_cut(horizontalcutimg_path):
 
         for y in range(width):
             for x in range(height):
-                if binimg[x,y,0] == 0:
+                if binimg[x,y,0] == 255:
                     blotcount += 1
             if blotcount > 0 and beginsignal == 1:
                 lines.append(y)
@@ -146,7 +147,7 @@ def vertical_cut(horizontalcutimg_path):
         '''
         cropbegin = 0
         
-        setcnt = 0
+        
         for x in filteredlines:
             if cropbegin == 0:
                 cropbegin = x

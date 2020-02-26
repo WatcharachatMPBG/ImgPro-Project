@@ -11,6 +11,7 @@ args = vars(ap.parse_args())
 img = cv2.imread(args["image"])
 img = cv2.fastNlMeansDenoisingColored(img,None,10,10,7,21) #eliminnates noise
 ret,binimg = cv2.threshold(img,125,255,cv2.THRESH_BINARY) #turns image into binary
+binimg = cv2.bitwise_not(binimg) #inverts image
 #finding horizontal partition
 height,width,channel = binimg.shape
 lines = []
@@ -20,7 +21,7 @@ beginsignal = 1
 
 for x in range(height):
     for y in range(width):
-        if binimg[x,y,0] == 0:
+        if binimg[x,y,0] == 255:
             blotcount += 1
     if blotcount > 0 and beginsignal == 1:
         lines.append(x)
