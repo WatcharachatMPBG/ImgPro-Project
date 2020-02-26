@@ -17,7 +17,8 @@ def normalize(img):
             blank_image[x,y,1] = img[x,y,1]
             blank_image[x,y,2] = img[x,y,2]
     return blank_image
-
+def comparison(baseimg,comparator):
+    return True
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required = True, help = "Path to the image")
 args = vars(ap.parse_args())
