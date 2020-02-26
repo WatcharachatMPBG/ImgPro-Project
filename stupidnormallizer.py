@@ -7,8 +7,10 @@ import shutil
 import os
 
 def normalize(img):
-    blank_image = np.zeros((100,100,3), np.uint8)
+    blank_image = np.zeros((60,60,3), np.uint8)
     width,height,channel = img.shape
+    if width > 60 or height > 60:
+        return blank_image
     for x in range(width):
         for y in range(height):
             blank_image[x,y,0] = img[x,y,0]
