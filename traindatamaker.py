@@ -8,6 +8,49 @@ import os
 import shutil
 import os
 
+def crop_image_only_outside(img):
+    height,width,channel = img.shape
+    top = 0
+    bottom = 0
+    left = 0
+    right = 0
+    for x in range(height):
+        for y in range(width):
+            if img[x,y,0] == 255:
+                top = x
+                break
+        if top != 0:
+            break
+    Cropimg = img[top:height,0:width]
+    height,width,channel = Cropimg.shape
+    for y in range(width):
+        for x in range(height):
+            if Cropimg[x,y,0] == 255:
+                left = y
+                break
+        if left != 0:
+            break
+    Cropimg = Cropimg[0:height,left:width]
+    height,width,channel = Cropimg.shape
+    for x in range(height):
+        for y in range(width):
+            if Cropimg[height-x-1,width-y-1,0] == 255:
+                bottom = height-x
+                break
+        if bottom != 0:
+            break
+    Cropimg = Cropimg[0:bottom,0:width]
+    height,width,channel = Cropimg.shape
+    for y in range(width):
+        for x in range(height):
+            if Cropimg[height-x-1,width-y-1,0] == 255:
+                right = width-y
+                break
+        if right != 0:
+            break
+    Cropimg = Cropimg[0:height,0:right]
+    return Cropimg
+
 def horizontal_cut(img):
     img = cv2.bitwise_not(img) #inverts image
     #img = cv2.fastNlMeansDenoisingColored(img,None,10,10,7,21) #eliminnates noise
@@ -156,6 +199,7 @@ def vertical_cut(horizontalcutimg_path):
                 if cnt == 57:
                     cnt = 0
                     setcnt += 1
+                imgCrop = crop_image_only_outside(imgCrop)
                 flag = cv2.imwrite('testfile/traindata/verticalcutoutput/line{}/{}_{}.png'.format(cntimg,cnt,setcnt), imgCrop)
                 #print(cnt,'V')
                 #print(flag)
