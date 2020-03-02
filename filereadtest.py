@@ -42,6 +42,41 @@ def comparison(baseimg,comparator):
     match_percent = str(round(match_percent, 2))
     return match_percent
 
+def comparison_split4x4(baseimg,comparator,blocksize):
+    width,height,channel = baseimg.shape
+    width2,height2,channel2 = comparator.shape
+    if width == width2 and height == height2:
+        print('image dimension matched')
+    else:
+        print('invalid dimension')
+        return 0
+    
+    splitbase = [0,0,0,0]
+    splitcompare = [0,0,0,0]
+    for x in range(blocksize):
+        for y in range(blocksize):
+            if baseimg[x,y,0] == 255:
+                splitbase[0] += 1
+            if comparator[x,y,0] == 255:
+                splitcompare[0] += 1
+            if baseimg[x+blocksize,y,0] == 255:
+                splitbase[1] += 1
+            if comparator[x+blocksize,y,0] == 255:
+                splitcompare[1] += 1
+            if baseimg[x,y+blocksize,0] == 255:
+                splitbase[2] += 1
+            if comparator[x,y+blocksize,0] == 255:
+                splitcompare[2] += 1
+            if baseimg[x+blocksize,y+blocksize,0] == 255:
+                splitbase[3] += 1
+            if comparator[x+blocksize,y+blocksize,0] == 255:
+                splitcompare[3] += 1
+    error = [0,0,0,0]
+    for x in range(4):
+        error[x] = abs((splitcompare[x]-splitbase[x])/splitcompare[x])*100
+    match_percent = (error[0]+error[1]+error[2]+error[3])/4
+    return match_percent
+
 filename1 = sys.argv[1]
 filename2 = sys.argv[2]
 img1 = cv2.imread(filename1)
@@ -53,7 +88,7 @@ for file in os.listdir(filename2):
         break
     compimg = cv2.imdecode(np.fromfile(u'{}\{}'.format(filename2,file), np.uint8), cv2.IMREAD_UNCHANGED)
     #compimg = cv2.imread(file)
-    print(comparison(img1,compimg))
+    print('error =',comparison_split4x4(img1,compimg,8))
 
         
 

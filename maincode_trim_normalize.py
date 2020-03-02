@@ -17,6 +17,15 @@ def normalize(img,dimensioncrop):
             blank_image[x,y,2] = img[x,y,2]
     return blank_image
 
+def normalize_byresize(img,dimensioncrop):
+    blank_image = np.zeros((dimensioncrop,dimensioncrop,3), np.uint8)
+    width,height,channel = img.shape
+    dim = (dimensioncrop,dimensioncrop)
+    if width > dimensioncrop or height > dimensioncrop:
+        return blank_image
+    blank_image = cv2.resize(img, dim, interpolation = cv2.INTER_NEAREST)
+    return blank_image
+
 def comparison(baseimg,comparator):
     width,height,channel = baseimg.shape
     width2,height2,channel2 = comparator.shape
@@ -218,7 +227,7 @@ def vertical_cut(horizontalcutimg_path):
             else:
                 imgCrop = binimg[0:height,cropbegin-1:x+1]
                 imgCrop = crop_image_only_outside(imgCrop)
-                imgCrop = normalize(imgCrop,40)
+                imgCrop = normalize(imgCrop,16)
                 flag = cv2.imwrite('testfile/verticalcutoutput/line{}/cropimage_{}.png'.format(cntimg,cnt), imgCrop)
                 #print(cnt,'V')
                 #print(flag)
