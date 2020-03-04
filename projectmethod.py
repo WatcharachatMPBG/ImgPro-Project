@@ -58,6 +58,64 @@ def comparison(baseimg,comparator): #recieve 2 image outputs matching percentage
     match_percent = str(round(match_percent, 2))
     return match_percent
 
+def comparison_split4x4(baseimg,comparator): #recieve 2 image and blocksize returns error percent
+    width,height,channel = baseimg.shape
+    width2,height2,channel2 = comparator.shape
+    splitsize = 8
+    if width == width2 and height == height2:
+        print('image dimension matched')
+    else:
+        print('invalid dimension')
+        return 0
+    if width % splitsize != 0 or height % splitsize != 0:
+        print('indivisible to {} block'.format(splitsize))
+        return 0
+    blocksize = width//splitsize
+    blockMatrix = (splitsize,splitsize)
+    splitbase = np.zeros(blockMatrix)
+    splitcompare = np.zeros(blockMatrix)
+    for x in range(splitsize):
+        for y in range(splitsize):
+            for h in range(blocksize):
+                for k in range(blocksize):
+                    if baseimg[(x*blocksize)+h,(y*blocksize)+k,0] == 255:
+                        splitbase[x,y] += 1
+                    if comparator[(x*blocksize)+h,(y*blocksize)+k,0] == 255:
+                        splitcompare[x,y] += 1
+    error = np.zeros(blockMatrix)
+    for x in range(splitsize):
+        for y in range(splitsize):
+            if splitcompare[x,y] == 0:
+                if splitbase[x,y] == 0:
+                    error[x,y] = 0
+                else:
+                    error[x,y] = 100
+            else:
+                error[x,y] = abs((splitcompare[x,y]-splitbase[x,y])/splitcompare[x,y])*100
+    error_percent = 0
+    for x in range(splitsize):
+        for y in range(splitsize):
+            error_percent += error[x,y]
+    error_percent = error_percent/(splitsize*splitsize)
+    return error_percent
+
+def comparison_split4x4_getleast_error(baseimg,comparefolderPath): #recieve base image to compare to most fit img in folderPath
+    leastError = 100
+    fileWithLeastErrror = None
+    errorPercent = 0
+    for file in os.listdir(comparefolderPath):
+        if file.endswith(".png"):
+            pass
+        else:
+            continue
+        compimg = imreadUnicode('{}/{}'.format(comparefolderPath,file))
+        errorPercent = comparison_split4x4(baseimg,compimg)
+        if errorPercent < leastError:
+            leastError = errorPercent
+            fileWithLeastErrror = '{}/{}'.format(comparefolderPath,file)
+    leastErrorImgComparedto = fileWithLeastErrror
+    return leastErrorImgComparedto
+
 def crop_image_only_outside(img): #crop image to reduce all blackspace outside
     height,width,channel = img.shape
     top = 0
@@ -100,45 +158,6 @@ def crop_image_only_outside(img): #crop image to reduce all blackspace outside
             break
     Cropimg = Cropimg[0:height,0:right]
     return Cropimg
-
-def comparison_split4x4(baseimg,comparator): #recieve 2 image and blocksize returns error percent
-    width,height,channel = baseimg.shape
-    width2,height2,channel2 = comparator.shape
-    if width == width2 and height == height2:
-        print('image dimension matched')
-    else:
-        print('invalid dimension')
-        return 0
-    if width % 4 != 0 or height % 4 != 0:
-        print('indivisible to 4 block')
-        return 0
-    blocksize = width/4
-    
-    splitbase = [0,0,0,0]
-    splitcompare = [0,0,0,0]
-    for x in range(blocksize):
-        for y in range(blocksize):
-            if baseimg[x,y,0] == 255:
-                splitbase[0] += 1
-            if comparator[x,y,0] == 255:
-                splitcompare[0] += 1
-            if baseimg[x+blocksize,y,0] == 255:
-                splitbase[1] += 1
-            if comparator[x+blocksize,y,0] == 255:
-                splitcompare[1] += 1
-            if baseimg[x,y+blocksize,0] == 255:
-                splitbase[2] += 1
-            if comparator[x,y+blocksize,0] == 255:
-                splitcompare[2] += 1
-            if baseimg[x+blocksize,y+blocksize,0] == 255:
-                splitbase[3] += 1
-            if comparator[x+blocksize,y+blocksize,0] == 255:
-                splitcompare[3] += 1
-    error = [0,0,0,0]
-    for x in range(4):
-        error[x] = abs((splitcompare[x]-splitbase[x])/splitcompare[x])*100
-    error_percent = (error[0]+error[1]+error[2]+error[3])/4
-    return error_percent
 
 def horizontal_cut(binimg,dest): #cuts binary image into folder 'horizontalcutoutput' by row to dest folder
     

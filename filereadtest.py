@@ -79,7 +79,13 @@ def comparison_split4x4(baseimg,comparator,blocksize):
                 splitcompare[3] += 1
     error = [0,0,0,0]
     for x in range(4):
-        error[x] = abs((splitcompare[x]-splitbase[x])/splitcompare[x])*100
+        if splitcompare[x] == 0:
+            if splitbase == 0:
+                error[x] = 0
+            else:
+                error[x] = 100
+        else:
+            error[x] = abs((splitcompare[x]-splitbase[x])/splitcompare[x])*100
     match_percent = (error[0]+error[1]+error[2]+error[3])/4
     return match_percent
 
@@ -94,8 +100,6 @@ for file in os.listdir(filename2):
         break
     compimg = imreadUnicode('{}/{}'.format(filename2,file))
     print('error =',comparison_split4x4(img1,compimg,8))
-        
-
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()

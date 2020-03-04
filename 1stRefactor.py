@@ -279,7 +279,7 @@ def vertical_cut(horizontalcutfolder_path): #cuts horizontal cuts outputs into s
             else:
                 imgCrop = binimg[0:height,cropbegin-1:x+1]
                 imgCrop = crop_image_only_outside(imgCrop)
-                imgCrop = normalize(imgCrop,16)
+                imgCrop = normalize(imgCrop,24)
                 flag = cv2.imwrite('testfile/verticalcutoutput/line{}/cropimage_{}.png'.format(cntimg,cnt), imgCrop)
                 #print(cnt,'V')
                 #print(flag)
