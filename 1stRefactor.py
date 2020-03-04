@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import argparse
 import os
 import shutil
+import projectmethod as pm
 
 def imreadUnicode(imgDirectory): #reads image with unicode chars
     readimg = cv2.imdecode(np.fromfile(u'{}'.format(imgDirectory), np.uint8), cv2.IMREAD_UNCHANGED)
@@ -300,5 +301,24 @@ img = cv2.imread(args["image"])
 
 img = preprocess(img)
 
-HCutOutputPath = horizontal_cut(img,'testfile')
-VCutOutputPath = vertical_cut(HCutOutputPath)
+HCutOutputPath = pm.horizontal_cut(img,'testfile')
+VCutOutputPath = pm.vertical_cut(HCutOutputPath)
+#print("Good Morning!", end = '') print without new line
+
+#run-time 10min+ very bad
+for folder in os.listdir(VCutOutputPath):
+    count = 0
+    for file in os.listdir('{}/{}'.format(VCutOutputPath,folder)):
+        if file.endswith(".png"):
+            pass
+        else:
+            break
+        img = pm.imreadUnicode('{}/{}/cropimage_{}.png'.format(VCutOutputPath,folder,count))
+        count += 1
+        print(pm.comparison_split4x4_getleast_error(img,'./testfile/normalizertest/charcomparators'),end = '')
+    print('')
+'''
+testimg = pm.imreadUnicode(r'testfile\verticalcutoutput\line1\cropimage_11.png')
+print(pm.comparison_split4x4_getleast_error(testimg,'./testfile/normalizertest/charcomparators'),end = '')
+print('\n')
+'''

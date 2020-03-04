@@ -63,7 +63,8 @@ def comparison_split4x4(baseimg,comparator): #recieve 2 image and blocksize retu
     width2,height2,channel2 = comparator.shape
     splitsize = 8
     if width == width2 and height == height2:
-        print('image dimension matched')
+        #print('image dimension matched')
+        pass
     else:
         print('invalid dimension')
         return 0
@@ -112,8 +113,12 @@ def comparison_split4x4_getleast_error(baseimg,comparefolderPath): #recieve base
         errorPercent = comparison_split4x4(baseimg,compimg)
         if errorPercent < leastError:
             leastError = errorPercent
-            fileWithLeastErrror = '{}/{}'.format(comparefolderPath,file)
+            fileWithLeastErrror = '{}'.format(file)
     leastErrorImgComparedto = fileWithLeastErrror
+    if fileWithLeastErrror == 'blank.png':
+        leastErrorImgComparedto = 'X'
+    else:
+        leastErrorImgComparedto = leastErrorImgComparedto[0]
     return leastErrorImgComparedto
 
 def crop_image_only_outside(img): #crop image to reduce all blackspace outside
@@ -222,7 +227,7 @@ def horizontal_cut(binimg,dest): #cuts binary image into folder 'horizontalcutou
             #print(flag)
             cnt += 1
             cropbegin = 0
-    cv2.imwrite('testfile/paragraphs_out.png',img)
+    #cv2.imwrite('testfile/paragraphs_out.png',img)
 
     #cv2.imshow('image',img)
     cv2.waitKey(0)
@@ -298,7 +303,7 @@ def vertical_cut(horizontalcutfolder_path): #cuts horizontal cuts outputs into s
             else:
                 imgCrop = binimg[0:height,cropbegin-1:x+1]
                 imgCrop = crop_image_only_outside(imgCrop)
-                imgCrop = normalize(imgCrop,16)
+                imgCrop = normalize(imgCrop,24)
                 flag = cv2.imwrite('testfile/verticalcutoutput/line{}/cropimage_{}.png'.format(cntimg,cnt), imgCrop)
                 #print(cnt,'V')
                 #print(flag)
@@ -310,4 +315,4 @@ def vertical_cut(horizontalcutfolder_path): #cuts horizontal cuts outputs into s
         cv2.waitKey(0)
         cv2.destroyAllWindows()
         cntimg += 1
-    return 'testfile/verticalcutoutput'
+    return '{}/verticalcutoutput'.format(horizontalcutfolder_path)
