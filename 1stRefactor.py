@@ -5,13 +5,21 @@ import argparse
 import os
 import shutil
 
-def preprocess(img):
+def imreadUnicode(imgDirectory): #reads image with unicode chars
+    readimg = cv2.imdecode(np.fromfile(u'{}'.format(imgDirectory), np.uint8), cv2.IMREAD_UNCHANGED)
+    return readimg
+
+def imwriteUnicode(img,imgDir,imgName): #writes image to a file with unicode char name
+    cv2.imwrite('{}/tempimg.png'.format(imgDir), img)
+    os.rename(r'{}/tempimg.png'.format(imgDir),r'{}/{}.png'.format(imgDir,imgName))
+
+def preprocess(img): #recieve input image and turns it into clean binary
     img = cv2.fastNlMeansDenoisingColored(img,None,10,10,7,21) #eliminnates noise
     ret,binimg = cv2.threshold(img,125,255,cv2.THRESH_BINARY) #turns image into binary
     binimg = cv2.bitwise_not(binimg) #inverts image
     return binimg
 
-def normalize(img,dimensioncrop):
+def normalize(img,dimensioncrop): #extend image with black spaces to the desired dimension
     blank_image = np.zeros((dimensioncrop,dimensioncrop,3), np.uint8)
     width,height,channel = img.shape
     if width > dimensioncrop or height > dimensioncrop:
@@ -23,7 +31,7 @@ def normalize(img,dimensioncrop):
             blank_image[x,y,2] = img[x,y,2]
     return blank_image
 
-def normalize_byresize(img,dimensioncrop):
+def normalize_byresize(img,dimensioncrop): #extend image by scaling to the desired dimension: loses scale property
     blank_image = np.zeros((dimensioncrop,dimensioncrop,3), np.uint8)
     width,height,channel = img.shape
     dim = (dimensioncrop,dimensioncrop)
@@ -32,7 +40,7 @@ def normalize_byresize(img,dimensioncrop):
     blank_image = cv2.resize(img, dim, interpolation = cv2.INTER_NEAREST)
     return blank_image
 
-def comparison(baseimg,comparator):
+def comparison(baseimg,comparator): #recieve 2 image outputs matching percentage by pixel
     width,height,channel = baseimg.shape
     width2,height2,channel2 = comparator.shape
     if width == width2 and height == height2:
@@ -50,7 +58,7 @@ def comparison(baseimg,comparator):
     match_percent = str(round(match_percent, 2))
     return match_percent
 
-def crop_image_only_outside(img):
+def crop_image_only_outside(img): #crop image to reduce all blackspace outside
     height,width,channel = img.shape
     top = 0
     bottom = 0
@@ -93,7 +101,46 @@ def crop_image_only_outside(img):
     Cropimg = Cropimg[0:height,0:right]
     return Cropimg
 
-def horizontal_cut(binimg,dest):
+def comparison_split4x4(baseimg,comparator): #recieve 2 image and blocksize returns error percent
+    width,height,channel = baseimg.shape
+    width2,height2,channel2 = comparator.shape
+    if width == width2 and height == height2:
+        print('image dimension matched')
+    else:
+        print('invalid dimension')
+        return 0
+    if width % 4 != 0 or height % 4 != 0:
+        print('indivisible to 4 block')
+        return 0
+    blocksize = width/4
+    
+    splitbase = [0,0,0,0]
+    splitcompare = [0,0,0,0]
+    for x in range(blocksize):
+        for y in range(blocksize):
+            if baseimg[x,y,0] == 255:
+                splitbase[0] += 1
+            if comparator[x,y,0] == 255:
+                splitcompare[0] += 1
+            if baseimg[x+blocksize,y,0] == 255:
+                splitbase[1] += 1
+            if comparator[x+blocksize,y,0] == 255:
+                splitcompare[1] += 1
+            if baseimg[x,y+blocksize,0] == 255:
+                splitbase[2] += 1
+            if comparator[x,y+blocksize,0] == 255:
+                splitcompare[2] += 1
+            if baseimg[x+blocksize,y+blocksize,0] == 255:
+                splitbase[3] += 1
+            if comparator[x+blocksize,y+blocksize,0] == 255:
+                splitcompare[3] += 1
+    error = [0,0,0,0]
+    for x in range(4):
+        error[x] = abs((splitcompare[x]-splitbase[x])/splitcompare[x])*100
+    error_percent = (error[0]+error[1]+error[2]+error[3])/4
+    return error_percent
+
+def horizontal_cut(binimg,dest): #cuts binary image into folder 'horizontalcutoutput' by row to dest folder
     
     #finding horizontal partition
     height,width,channel = binimg.shape
@@ -163,7 +210,7 @@ def horizontal_cut(binimg,dest):
     cv2.destroyAllWindows()
     return dest
 
-def vertical_cut(horizontalcutfolder_path):
+def vertical_cut(horizontalcutfolder_path): #cuts horizontal cuts outputs into small chars by line into same directory
 
     cntimg = 0
     path = '{}/horizontalcutoutput'.format(horizontalcutfolder_path)
