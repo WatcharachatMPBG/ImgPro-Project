@@ -6,6 +6,13 @@ import os
 import shutil
 import sys
 
+def imreadUnicode(imgDirectory):
+    readimg = cv2.imdecode(np.fromfile(u'{}'.format(imgDirectory), np.uint8), cv2.IMREAD_UNCHANGED)
+    return readimg
+
+def imwriteUnicode(img,imgDir,imgName):
+    cv2.imwrite('{}/tempimg.png'.format(imgDir), img)
+    os.rename(r'{}/tempimg.png'.format(imgDir),r'{}/{}.png'.format(imgDir,imgName))
 
 def normalize(img):
     blank_image = np.zeros((60,60,3), np.uint8)
@@ -18,7 +25,6 @@ def normalize(img):
             blank_image[x,y,1] = img[x,y,1]
             blank_image[x,y,2] = img[x,y,2]
     return blank_image
-
 
 def comparison(baseimg,comparator):
     width,height,channel = baseimg.shape
@@ -79,17 +85,15 @@ def comparison_split4x4(baseimg,comparator,blocksize):
 
 filename1 = sys.argv[1]
 filename2 = sys.argv[2]
-img1 = cv2.imread(filename1)
+img1 = imreadUnicode(filename1)
 for file in os.listdir(filename2):
     print(file)
     if file.endswith(".png"):
         pass
     else:
         break
-    compimg = cv2.imdecode(np.fromfile(u'{}\{}'.format(filename2,file), np.uint8), cv2.IMREAD_UNCHANGED)
-    #compimg = cv2.imread(file)
+    compimg = imreadUnicode('{}/{}'.format(filename2,file))
     print('error =',comparison_split4x4(img1,compimg,8))
-
         
 
 

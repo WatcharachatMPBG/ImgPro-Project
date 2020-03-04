@@ -5,6 +5,12 @@ import argparse
 import os
 import shutil
 
+def preprocess(img):
+    img = cv2.fastNlMeansDenoisingColored(img,None,10,10,7,21) #eliminnates noise
+    ret,binimg = cv2.threshold(img,125,255,cv2.THRESH_BINARY) #turns image into binary
+    binimg = cv2.bitwise_not(binimg) #inverts image
+    return binimg
+
 def normalize(img,dimensioncrop):
     blank_image = np.zeros((dimensioncrop,dimensioncrop,3), np.uint8)
     width,height,channel = img.shape
@@ -87,17 +93,17 @@ def crop_image_only_outside(img):
     Cropimg = Cropimg[0:height,0:right]
     return Cropimg
 
-def horizontal_cut(img):
+def horizontal_cut(binimg,dest):
     
-    img = cv2.fastNlMeansDenoisingColored(img,None,10,10,7,21) #eliminnates noise
-    ret,binimg = cv2.threshold(img,125,255,cv2.THRESH_BINARY) #turns image into binary
-    binimg = cv2.bitwise_not(binimg) #inverts image
     #finding horizontal partition
     height,width,channel = binimg.shape
     lines = []
 
     blotcount = 0
     beginsignal = 1
+
+    shutil.rmtree('{}/horizontalcutoutput'.format(dest),ignore_errors=True)
+    os.makedirs('{}/horizontalcutoutput'.format(dest),exist_ok=True)
 
     for x in range(height):
         for y in range(width):
@@ -134,10 +140,10 @@ def horizontal_cut(img):
             thisline = x
     filteredlines.append(thisline)
     #results are stored in filteredlines
-
+    '''
     for x in filteredlines:
         cv2.line(img,(0,x),(width,x),(250,0,0),1)
-
+    '''
     cropbegin = 0
     cnt = 0
     for x in filteredlines:
@@ -145,7 +151,7 @@ def horizontal_cut(img):
             cropbegin = x
         else:
             imgCrop = binimg[cropbegin-1:x+1,0:width]
-            flag = cv2.imwrite('testfile/horizontalcutoutput/cropimage_{}.png'.format(cnt), imgCrop)
+            flag = cv2.imwrite('{}/horizontalcutoutput/cropimage_{}.png'.format(dest,cnt), imgCrop)
             #print(cnt,'H')
             #print(flag)
             cnt += 1
@@ -155,22 +161,22 @@ def horizontal_cut(img):
     #cv2.imshow('image',img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
-    return 'testfile/horizontalcutoutput/'
+    return dest
 
-def vertical_cut(horizontalcutimg_path):
+def vertical_cut(horizontalcutfolder_path):
 
     cntimg = 0
-    path = horizontalcutimg_path
+    path = '{}/horizontalcutoutput'.format(horizontalcutfolder_path)
     for file in os.listdir(path):
         if file.endswith(".png"):
             pass
         else:
             break
         #image preprocessing
-        shutil.rmtree('testfile/verticalcutoutput/line{}'.format(cntimg),ignore_errors=True)
+        shutil.rmtree('{}/verticalcutoutput/line{}'.format(horizontalcutfolder_path,cntimg),ignore_errors=True)
 
-        os.makedirs('testfile/verticalcutoutput/line{}'.format(cntimg),exist_ok=True)
-        binimg = cv2.imread('testfile/horizontalcutoutput/cropimage_{}.png'.format(cntimg))
+        os.makedirs('{}/verticalcutoutput/line{}'.format(horizontalcutfolder_path,cntimg),exist_ok=True)
+        binimg = cv2.imread('{}/horizontalcutoutput/cropimage_{}.png'.format(horizontalcutfolder_path,cntimg))
         height,width,channel = binimg.shape
 
         #finding vertical partition
@@ -245,5 +251,7 @@ ap.add_argument("-i", "--image", required = True, help = "Path to the image")
 args = vars(ap.parse_args())
 img = cv2.imread(args["image"])
 
-HCutOutputPath = horizontal_cut(img)
+img = preprocess(img)
+
+HCutOutputPath = horizontal_cut(img,'testfile')
 VCutOutputPath = vertical_cut(HCutOutputPath)
