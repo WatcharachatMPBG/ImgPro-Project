@@ -9,6 +9,10 @@ def imreadUnicode(imgDirectory): #reads image with unicode chars
     readimg = cv2.imdecode(np.fromfile(u'{}'.format(imgDirectory), np.uint8), cv2.IMREAD_UNCHANGED)
     return readimg
 
+def imreadUnicodeGray(imgDirectory): #reads image with unicode chars
+    readimg = cv2.imdecode(np.fromfile(u'{}'.format(imgDirectory), np.uint8), cv2.IMREAD_GRAYSCALE)
+    return readimg
+
 def imwriteUnicode(img,imgDir,imgName): #writes image to a file with unicode char name
     cv2.imwrite('{}/tempimg.png'.format(imgDir), img)
     os.rename(r'{}/tempimg.png'.format(imgDir),r'{}/{}.png'.format(imgDir,imgName))

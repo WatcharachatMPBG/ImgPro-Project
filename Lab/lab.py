@@ -1,33 +1,34 @@
-import cv2 as cv
+#!/usr/bin/env python 
+# -*- coding:utf-8 -*-
+import cv2
 import numpy as np
-from matplotlib import pyplot as plt
-img = cv.imread('image.jpg',0)
-ret,binimg = cv.threshold(img,125,255,cv.THRESH_BINARY) #turns image into binary
-binimg = cv.bitwise_not(binimg)
-img = cv.cvtColor(binimg, cv.COLOR_BGR2GRAY)
-img = cv.bitwise_not(img)
-img2 = img.copy()
-template = cv.imread('pattern.png',0)
-w, h = template.shape[::-1]
-# All the 6 methods for comparison in a list
-methods = ['cv.TM_CCOEFF', 'cv.TM_CCOEFF_NORMED', 'cv.TM_CCORR',
-            'cv.TM_CCORR_NORMED', 'cv.TM_SQDIFF', 'cv.TM_SQDIFF_NORMED']
-for meth in methods:
-    img = img2.copy()
-    method = eval(meth)
-    # Apply template Matching
-    res = cv.matchTemplate(img,template,method)
-    min_val, max_val, min_loc, max_loc = cv.minMaxLoc(res)
-    # If the method is TM_SQDIFF or TM_SQDIFF_NORMED, take minimum
-    if method in [cv.TM_SQDIFF, cv.TM_SQDIFF_NORMED]:
-        top_left = min_loc
-    else:
-        top_left = max_loc
-    bottom_right = (top_left[0] + w, top_left[1] + h)
-    cv.rectangle(img,top_left, bottom_right, 255, 2)
-    plt.subplot(121),plt.imshow(res,cmap = 'gray')
-    plt.title('Matching Result'), plt.xticks([]), plt.yticks([])
-    plt.subplot(122),plt.imshow(img,cmap = 'gray')
-    plt.title('Detected Point'), plt.xticks([]), plt.yticks([])
-    plt.suptitle(meth)
-    plt.show()
+
+RESIZED_IMAGE_WIDTH = 24
+RESIZED_IMAGE_HEIGHT = 24
+
+img = cv2.imread("test1.png",0)
+ret,binimg = cv2.threshold(img,125,255,cv2.THRESH_BINARY)
+cv2.imshow("img", binimg)
+#cv2.imshow("img", imgThresh)
+
+intClassifications = []
+npaFlattenedImages =  np.empty((0, RESIZED_IMAGE_WIDTH * RESIZED_IMAGE_HEIGHT))
+
+intChar = cv2.waitKey(0)
+intClassifications.append(intChar)
+
+
+npaFlattenedImage = binimg.reshape((1, RESIZED_IMAGE_WIDTH * RESIZED_IMAGE_HEIGHT))  # flatten image to 1d numpy array so we can write to file later
+npaFlattenedImages = np.append(npaFlattenedImages, npaFlattenedImage, 0)
+
+fltClassifications = np.array(intClassifications, np.float32)                   # convert classifications list of ints to numpy array of floats
+npaClassifications = fltClassifications.reshape((fltClassifications.size, 1))   # flatten numpy array of floats to 1d so we can write to file later
+
+
+np.savetxt("classifications.txt", npaClassifications)           # write flattened images to file
+np.savetxt("flattened_images.txt", npaFlattenedImages)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+intChar = cv2.waitKey(0)
+print(intChar)
