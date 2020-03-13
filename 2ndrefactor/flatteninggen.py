@@ -15,12 +15,12 @@ def main():
     intClassifications = []
     npaFlattenedImages =  np.empty((0, RESIZED_IMAGE_WIDTH * RESIZED_IMAGE_HEIGHT))
 
-    
+    '''
     #init dictionary
     dictionary = {"dictcount":0}
     json.dump(dictionary, open("dictThaitoNum.txt",'w'))
     json.dump(dictionary, open("dictNumtoThai.txt",'w'))
-    
+    '''
     '''
     #open dictionary
     d2 = json.load(open("text.txt"))
@@ -28,7 +28,7 @@ def main():
 
     dictThaitoNum = json.load(open("dictThaitoNum.txt"))
     dictNumtoThai = json.load(open("dictNumtoThai.txt"))
-    dictnumbering = 0
+    dictnumbering = dictThaitoNum['dictcount']
 
     for file in os.listdir(trainImageFolder):
         if file.endswith(".png"):
