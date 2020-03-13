@@ -11,7 +11,7 @@ import json
 
 RESIZED_IMAGE_WIDTH = 36
 RESIZED_IMAGE_HEIGHT = 36
-thString = 'กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรฤลฦวศษสหฬอฮฯะัาำิีึืฺุู฿เแโใไๅๆ็่้๊๋์ํ๎๏๐๑๒๓๔๕๖๗๘๙๚๛'
+#thString = 'กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรฤลฦวศษสหฬอฮฯะัาำิีึืฺุู฿เแโใไๅๆ็่้๊๋์ํ๎๏๐๑๒๓๔๕๖๗๘๙๚๛'
 dictThaitoNum = json.load(open("dictThaitoNum.txt"))
 dictNumtoThai = json.load(open("dictNumtoThai.txt"))
 try:

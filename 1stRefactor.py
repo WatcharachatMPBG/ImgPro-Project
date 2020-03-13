@@ -22,6 +22,7 @@ def preprocess(img): #recieve input image and turns it into clean binary
 
 def normalize(img,dimensioncrop): #extend image with black spaces to the desired dimension
     blank_image = np.zeros((dimensioncrop,dimensioncrop,3), np.uint8)
+    print(dimensioncrop)
     width,height,channel = img.shape
     if width > dimensioncrop or height > dimensioncrop:
         return blank_image
@@ -280,7 +281,7 @@ def vertical_cut(horizontalcutfolder_path): #cuts horizontal cuts outputs into s
             else:
                 imgCrop = binimg[0:height,cropbegin-1:x+1]
                 imgCrop = crop_image_only_outside(imgCrop)
-                imgCrop = normalize(imgCrop,24)
+                imgCrop = normalize(imgCrop,36)
                 flag = cv2.imwrite('testfile/verticalcutoutput/line{}/cropimage_{}.png'.format(cntimg,cnt), imgCrop)
                 #print(cnt,'V')
                 #print(flag)
@@ -306,6 +307,7 @@ VCutOutputPath = pm.vertical_cut(HCutOutputPath)
 #print("Good Morning!", end = '') print without new line
 
 #run-time 10min+ very bad
+'''
 for folder in os.listdir(VCutOutputPath):
     count = 0
     for file in os.listdir('{}/{}'.format(VCutOutputPath,folder)):
@@ -317,6 +319,7 @@ for folder in os.listdir(VCutOutputPath):
         count += 1
         print(pm.comparison_split4x4_getleast_error(img,'./testfile/normalizertest/charcomparators'),end = '')
     print('')
+'''
 '''
 testimg = pm.imreadUnicode(r'testfile\verticalcutoutput\line1\cropimage_11.png')
 print(pm.comparison_split4x4_getleast_error(testimg,'./testfile/normalizertest/charcomparators'),end = '')

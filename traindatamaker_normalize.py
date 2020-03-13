@@ -233,9 +233,9 @@ def vertical_cut(horizontalcutimg_path):
                     cnt = 0
                     setcnt += 1
                 imgCrop = crop_image_only_outside(imgCrop)
-                imgCrop = normalize(imgCrop,24)
+                imgCrop = normalize(imgCrop,36)
                 flag = cv2.imwrite('testfile/traindata/verticalcutoutput/tempimg.png', imgCrop)
-                os.rename(r'testfile/traindata/verticalcutoutput/tempimg.png',r'testfile/traindata/verticalcutoutput/{}_{}.png'.format(thaistr[cnt],setcnt))
+                os.rename(r'testfile/traindata/verticalcutoutput/tempimg.png',r'testfile/traindata/verticalcutoutput/{}_{}.png'.format(cnt,setcnt))
                 #print(cnt,'V')
                 #print(flag)
                 cnt += 1
