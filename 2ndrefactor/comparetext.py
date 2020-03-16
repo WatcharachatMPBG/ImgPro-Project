@@ -12,11 +12,18 @@ import sys
 
 
 def main():
-    basetext = sys.argv[1]
-    comparetext = sys.argv[2]
-    res = {} 
-    for keys in test_str: 
-        res[keys] = res.get(keys, 0) + 1
+    basetext = str(sys.argv[1])
+    comparetext = str(sys.argv[2])
+    textstring = (open(basetext,encoding="utf8")).read()
+    textstring2 = (open(comparetext,encoding="utf8")).read()
+    res1 = {} 
+    for keys in textstring: 
+        res1[keys] = res1.get(keys, 0) + 1
+    print (res1)
+    res2 = {} 
+    for keys in textstring2: 
+        res2[keys] = res2.get(keys, 0) + 1
+    print (res2)
 
 if __name__ == "__main__":
     main()
