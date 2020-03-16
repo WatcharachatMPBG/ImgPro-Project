@@ -46,6 +46,12 @@ def main():
         if intChar in dictThaitoNum:
             print("char found!")
             dictnumbering = dictThaitoNum[intChar]
+
+            intClassifications.append(dictnumbering)
+            npaFlattenedImage = img.reshape((1, RESIZED_IMAGE_WIDTH * RESIZED_IMAGE_HEIGHT))  # flatten image to 1d numpy array so we can write to file later
+            npaFlattenedImages = np.append(npaFlattenedImages, npaFlattenedImage, 0)
+        elif: intChar == '' or intChar == ' '
+            print("char ignored")
         else:
             print("new char!, added to dict")
             dictThaitoNum['dictcount'] += 1
@@ -53,10 +59,14 @@ def main():
             dictThaitoNum[intChar] = dictThaitoNum['dictcount']
             dictnumbering = dictThaitoNum[intChar]
             dictNumtoThai[dictnumbering] = intChar
-
+            intClassifications.append(dictnumbering)
+            npaFlattenedImage = img.reshape((1, RESIZED_IMAGE_WIDTH * RESIZED_IMAGE_HEIGHT))  # flatten image to 1d numpy array so we can write to file later
+            npaFlattenedImages = np.append(npaFlattenedImages, npaFlattenedImage, 0)
+        '''
         intClassifications.append(dictnumbering)
         npaFlattenedImage = img.reshape((1, RESIZED_IMAGE_WIDTH * RESIZED_IMAGE_HEIGHT))  # flatten image to 1d numpy array so we can write to file later
         npaFlattenedImages = np.append(npaFlattenedImages, npaFlattenedImage, 0)
+        '''
 
     fltClassifications = np.array(intClassifications, np.float32)                   # convert classifications list of ints to numpy array of floats
     npaClassifications = fltClassifications.reshape((fltClassifications.size, 1))   # flatten numpy array of floats to 1d so we can write to file later

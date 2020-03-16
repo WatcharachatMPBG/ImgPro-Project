@@ -24,6 +24,12 @@ def main():
     for keys in textstring2: 
         res2[keys] = res2.get(keys, 0) + 1
     print (res2)
+    diff = {}
+    for keys in res1.keys():
+        if keys in res2:
+            diff[keys] = res1[keys] - res2[keys]
+    print(diff)
+
 
 if __name__ == "__main__":
     main()
