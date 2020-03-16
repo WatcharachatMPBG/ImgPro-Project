@@ -16,7 +16,7 @@ def main():
         kbdinput = str(input())
         if kbdinput == '':
             break
-        inputImg = cv2.imread(kbdinput)
+        inputImg = cv2.imread("docs/{}".format(kbdinput))
         binimg = pm.preprocess(inputImg)
 
         dest = 'trainingImgs'

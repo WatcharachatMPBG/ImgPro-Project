@@ -10,7 +10,7 @@ import sys
 
 def main():
     kbdinput = sys.argv[1]
-    inputImg = cv2.imread(kbdinput)
+    inputImg = cv2.imread("docs/{}".format(kbdinput))
     binimg = pm.preprocess(inputImg)
     dest = 'testtingImgs'
     pm.horizontal_cut(binimg,dest)

@@ -11,6 +11,8 @@ import json
 
 RESIZED_IMAGE_WIDTH = 36
 RESIZED_IMAGE_HEIGHT = 36
+text_file = open("output.txt", "wb")
+
 
 def main():
     #thString = 'กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรฤลฦวศษสหฬอฮฯะัาำิีึืฺุู฿เแโใไๅๆ็่้๊๋์ํ๎๏๐๑๒๓๔๕๖๗๘๙๚๛'
@@ -63,6 +65,8 @@ def main():
         folderCount += 1
         # end for
     print ("\n" + strFinalString + "\n")
+    n = text_file.write(strFinalString.encode("utf8"))
+    text_file.close()
     #ก =161 กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรฤลฦวศษสหฬอฮฯะัาำิีึืฺุู฿เแโใไๅๆ็่้๊๋์ํ๎๏๐๑๒๓๔๕๖๗๘๙๚๛
 
 if __name__ == "__main__":
