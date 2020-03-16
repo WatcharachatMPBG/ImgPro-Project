@@ -24,11 +24,23 @@ def main():
     for keys in textstring2: 
         res2[keys] = res2.get(keys, 0) + 1
     print (res2)
+
+    charcount = 0
+    diffcount = 0
     diff = {}
+    res1['ํ'] = 0
     for keys in res1.keys():
+        charcount += res1[keys]
+        if keys == 'ำ':
+            res1['ํ'] += res1[keys]
+            res1['า'] += res1[keys] 
         if keys in res2:
-            diff[keys] = res1[keys] - res2[keys]
-    print(diff)
+            diff[keys] = abs(res1[keys] - res2[keys])
+        else:
+            diff[keys] = res1[keys]
+        diffcount += diff[keys]
+    print("charcount = {}".format(charcount))
+    print("diffcount = {}".format(diffcount))
 
 
 if __name__ == "__main__":
