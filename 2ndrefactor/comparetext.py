@@ -9,7 +9,6 @@ import os
 import shutil
 import projectMethod as pm
 import sys
-from fuzzywuzzy import fuzz
 
 text_file = open("filtered.txt", "wb")
 
@@ -45,10 +44,6 @@ def main():
     print("charcount = {}".format(charcount))
     print("diffcount = {}".format(diffcount))
     print("error = ",((abs(charcount - (charcount - diffcount)))/charcount)*100,'%')
-    print("Simple Ratio = ",fuzz.ratio(basetext,comparetext))
-    print("Partial Ratio = ",fuzz.partial_ratio(basetext,comparetext))
-    print("Token Sort Ratio = ",fuzz.token_sort_ratio(basetext,comparetext))
-    print("Token Set Ratio = ",fuzz.token_set_ratio(basetext,comparetext))
     text_file.write(textstring.encode("utf8"))
     text_file.close()
 
