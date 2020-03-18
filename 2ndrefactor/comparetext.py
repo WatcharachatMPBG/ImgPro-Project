@@ -9,16 +9,19 @@ import os
 import shutil
 import projectMethod as pm
 import sys
+from fuzzywuzzy import fuzz
 
+text_file = open("filtered.txt", "wb")
 
 def main():
-    basetext = str(sys.argv[1])
+    basetext = str((sys.argv[1]))
     comparetext = str(sys.argv[2])
-    textstring = (open(basetext,encoding="utf8")).read()
+    textstring = (open(basetext,encoding="utf8")).read().replace("ำ","ํา")
     textstring2 = (open(comparetext,encoding="utf8")).read()
     res1 = {} 
-    for keys in textstring: 
-        res1[keys] = res1.get(keys, 0) + 1
+    for keys in textstring: #กรองมาคิดเฉพาะ text ไทยเท่านั้น
+        if keys in "กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรฤลฦวศษสหฬอฮฯะัาำิีึืฺุู฿เแโใไๅๆ็่้๊๋์ํ๎๏๐๑๒๓๔๕๖๗๘๙๚๛":
+            res1[keys] = res1.get(keys, 0) + 1
     print (res1)
     res2 = {} 
     for keys in textstring2: 
@@ -41,6 +44,13 @@ def main():
         diffcount += diff[keys]
     print("charcount = {}".format(charcount))
     print("diffcount = {}".format(diffcount))
+    print("error = ",((abs(charcount - (charcount - diffcount)))/charcount)*100,'%')
+    print("Simple Ratio = ",fuzz.ratio(basetext,comparetext))
+    print("Partial Ratio = ",fuzz.partial_ratio(basetext,comparetext))
+    print("Token Sort Ratio = ",fuzz.token_sort_ratio(basetext,comparetext))
+    print("Token Set Ratio = ",fuzz.token_set_ratio(basetext,comparetext))
+    text_file.write(textstring.encode("utf8"))
+    text_file.close()
 
 
 if __name__ == "__main__":

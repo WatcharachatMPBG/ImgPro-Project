@@ -242,6 +242,7 @@ def vertical_cut(horizontalcutfolder_path): #cuts horizontal cuts outputs into s
 
     cntimg = 0
     path = '{}/horizontalcutoutput'.format(horizontalcutfolder_path)
+    shutil.rmtree('{}/verticalcutoutput/'.format(horizontalcutfolder_path),ignore_errors=True)
     for file in os.listdir(path):
         if file.endswith(".png"):
             pass
