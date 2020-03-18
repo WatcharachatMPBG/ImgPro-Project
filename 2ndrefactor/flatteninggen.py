@@ -15,12 +15,12 @@ def main():
     intClassifications = []
     npaFlattenedImages =  np.empty((0, RESIZED_IMAGE_WIDTH * RESIZED_IMAGE_HEIGHT))
 
-    '''
+    
     #init dictionary
     dictionary = {"dictcount":0}
     json.dump(dictionary, open("dictThaitoNum.txt",'w'))
     json.dump(dictionary, open("dictNumtoThai.txt",'w'))
-    '''
+    
     '''
     #open dictionary
     d2 = json.load(open("text.txt"))
@@ -50,7 +50,7 @@ def main():
             intClassifications.append(dictnumbering)
             npaFlattenedImage = img.reshape((1, RESIZED_IMAGE_WIDTH * RESIZED_IMAGE_HEIGHT))  # flatten image to 1d numpy array so we can write to file later
             npaFlattenedImages = np.append(npaFlattenedImages, npaFlattenedImage, 0)
-        elif: intChar == '' or intChar == ' '
+        elif intChar == '':
             print("char ignored")
         else:
             print("new char!, added to dict")
