@@ -15,11 +15,12 @@ def main():
     intClassifications = []
     npaFlattenedImages =  np.empty((0, RESIZED_IMAGE_WIDTH * RESIZED_IMAGE_HEIGHT))
 
-    
+    '''
     #init dictionary
     dictionary = {"dictcount":0}
     json.dump(dictionary, open("dictThaitoNum.txt",'w'))
     json.dump(dictionary, open("dictNumtoThai.txt",'w'))
+    '''
     
     '''
     #open dictionary
