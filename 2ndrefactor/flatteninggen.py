@@ -15,12 +15,12 @@ def main():
     intClassifications = []
     npaFlattenedImages =  np.empty((0, RESIZED_IMAGE_WIDTH * RESIZED_IMAGE_HEIGHT))
 
-    '''
+    
     #init dictionary
     dictionary = {"dictcount":0}
     json.dump(dictionary, open("dictThaitoNum.txt",'w'))
     json.dump(dictionary, open("dictNumtoThai.txt",'w'))
-    '''
+    
     
     '''
     #open dictionary
@@ -73,8 +73,8 @@ def main():
     npaClassifications = fltClassifications.reshape((fltClassifications.size, 1))   # flatten numpy array of floats to 1d so we can write to file later
 
 
-    np.savetxt("classificationsV2.txt", npaClassifications)           # write flattened images to file
-    np.savetxt("flattened_imagesV2.txt", npaFlattenedImages)
+    np.savetxt('fileclassificationsV2.txt', npaClassifications)           # write flattened images to file
+    np.savetxt('flattened_imagesV2.txt', npaFlattenedImages)
     json.dump(dictThaitoNum, open("dictThaitoNum.txt",'w'))
     json.dump(dictNumtoThai, open("dictNumtoThai.txt",'w'))
     cv2.destroyAllWindows()
