@@ -14,13 +14,12 @@ def main():
 
     intClassifications = []
     npaFlattenedImages =  np.empty((0, RESIZED_IMAGE_WIDTH * RESIZED_IMAGE_HEIGHT))
-
-    
+    '''
     #init dictionary
     dictionary = {"dictcount":0}
-    json.dump(dictionary, open("dictThaitoNum.txt",'w'))
-    json.dump(dictionary, open("dictNumtoThai.txt",'w'))
-    
+    json.dump(dictionary, open("dictThaitoNumEX.txt",'w'))
+    json.dump(dictionary, open("dictNumtoThaiEX.txt",'w'))
+    '''
     '''
     #open dictionary
     d2 = json.load(open("text.txt"))
@@ -71,6 +70,14 @@ def main():
     fltClassifications = np.array(intClassifications, np.float32)                   # convert classifications list of ints to numpy array of floats
     npaClassifications = fltClassifications.reshape((fltClassifications.size, 1))   # flatten numpy array of floats to 1d so we can write to file later
     
+    
+    lastClassifications = np.genfromtxt("classificationsV2.txt")
+    lastClassifications = lastClassifications.reshape((lastClassifications.size, 1))
+    lastFlattenedImages = np.loadtxt("flattened_imagesV2.txt")
+    
+    npaClassifications = np.concatenate([lastClassifications,npaClassifications])
+    npaFlattenedImages = np.concatenate([lastFlattenedImages,npaFlattenedImages])
+
     np.savetxt("classificationsV2.txt", npaClassifications)           # write flattened images to file
     np.savetxt("flattened_imagesV2.txt", npaFlattenedImages)
     
