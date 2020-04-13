@@ -82,6 +82,10 @@
 </script>
 <script type="text/javascript">
     const tableBody = document.querySelector("#myTable > tbody");
+    function populateTable (json)
+    {
+        console.log(json);
+    }
     function loadData () 
     {
         const request = new XMLHttpRequest();
@@ -99,10 +103,7 @@
         };
         request.send();
     }
-    function populateTable (json)
-    {
-        console.log(json);
-    }
+
     if( document.readyState !== 'loading' ) 
     {
         console.log( 'document is already ready, just execute code here' );
