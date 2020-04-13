@@ -82,10 +82,7 @@
 </script>
 <script type="text/javascript">
     const tableBody = document.querySelector("#myTable > tbody");
-    function populateTable (json)
-    {
-        console.log(json);
-    }
+
     function loadData () 
     {
         const request = new XMLHttpRequest();
@@ -103,6 +100,13 @@
         };
         request.send();
     }
+    function populateTable (json)
+    {
+        while (tableBody.firstChild)
+        {
+            tableBody.removeChild(tableBody.firstChild);
+        }
+    }
     if( document.readyState !== 'loading' ) 
     {
         console.log( 'document is already ready, just execute code here' );
@@ -115,7 +119,6 @@
             loadData();
         });
     }
-    console.log('loaded!');
 </script>
 
 </body>
