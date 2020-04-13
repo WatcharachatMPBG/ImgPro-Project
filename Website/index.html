@@ -103,7 +103,6 @@
         };
         request.send();
     }
-
     if( document.readyState !== 'loading' ) 
     {
         console.log( 'document is already ready, just execute code here' );
@@ -116,6 +115,7 @@
             loadData();
         });
     }
+    console.log('loaded!');
 </script>
 
 </body>
