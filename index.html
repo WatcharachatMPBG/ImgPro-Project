@@ -108,9 +108,13 @@
         }
 
         json.forEach((row) => {
+            const tr = document.createElement("tr");
             row.forEach((cell) => {
-                console.log(cell);
+                const td = document.createElement("td");
+                td.textContent = cell;
+                tr.appendChild(td);
             });
+            tableBody.appendChild(tr);
         });
     }
     if( document.readyState !== 'loading' ) 
