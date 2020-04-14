@@ -10,6 +10,7 @@ import projectMethod as pm
 import sys
 import csv
 import codecs
+import json
 
 #เรื่อง เรียน วันที่ นาย/นาง
 
@@ -41,14 +42,16 @@ def main():
     print(subject)
     print(address)
     print(date)
-    print(person)
 
-    with codecs.open('info.csv', 'w','utf-8') as csv_file:
-        csv_writer = csv.writer(csv_file, delimiter=',')
-        csv_writer.writerow(subject)
-        csv_writer.writerow(address)
-        csv_writer.writerow(date)
-        csv_writer.writerow(person)
+    databook = json.load(open("dataprofile.json"))
+    print (databook)
+    data = []
+    data.append(subject[0])
+    data.append(address[0])
+    data.append(date[0])
+    databook.append(data)
+    
+    json.dump(databook, open("dataprofile.json",'w'))
 
 if __name__ == "__main__":
     main()
