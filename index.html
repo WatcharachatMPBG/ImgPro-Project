@@ -148,16 +148,10 @@ left: 60px; /*position where enlarged image should offset horizontally */
             var count = 0;
             row.forEach((cell) => {
                 if (count === 3) {
-                    const imageHover = document.createElement('a');
-                    imageHover.className = "thumbnail";
-                    imageHover.href = "#thumb";
+                    const imagelink = document.createElement('a');
+                    imageHover.href = "https://raw.githubusercontent.com/WatcharachatMPBG/ImgPro-Project/master/program/docs/Capture.PNG";
                     imageHover.textContent = "Preview";
-                    const spanning = document.createElement('span');
-                    const imagesource = document.createElement('img');
-                    imagesource.src = cell;
-                    spanning.appendChild(imagesource);
-                    imageHover.appendChild(spanning);
-                    tr.appendChild(imageHover);
+                    tr.appendChild(imagelink);
                 }
                 else{
                     const td = document.createElement("td");
