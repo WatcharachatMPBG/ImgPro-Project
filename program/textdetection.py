@@ -49,6 +49,7 @@ def main():
     data.append(subject[0])
     data.append(address[0])
     data.append(date[0])
+    data.append("program/result.png")
     databook.append(data)
     
     json.dump(databook, open("dataprofile.json",'w'))
