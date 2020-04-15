@@ -152,13 +152,16 @@ left: 60px; /*position where enlarged image should offset horizontally */
                     imagelink.href = "https://raw.githubusercontent.com/WatcharachatMPBG/ImgPro-Project/master/program/docs/Capture.PNG";
                     imagelink.textContent = "Preview";
                     tr.appendChild(imagelink);
+                    console.log("A");
                 }
                 else{
                     const td = document.createElement("td");
                     td.textContent = cell;
                     tr.appendChild(td);
+                    console.log("B");
                 }
                 count = count+1;
+                console.log("+");
             });
             tableBody.appendChild(tr);
         });
