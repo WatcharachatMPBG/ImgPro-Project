@@ -15,6 +15,7 @@ import json
 #เรื่อง เรียน วันที่ นาย/นาง
 
 def main():
+    kbdinput = sys.argv[1]
     subject = []
     address = []
     date = []
@@ -49,7 +50,7 @@ def main():
     data.append(subject[0])
     data.append(address[0])
     data.append(date[0])
-    data.append("program/result.png")
+    data.append(kbdinput)
     databook.append(data)
     
     json.dump(databook, open("dataprofile.json",'w'))
