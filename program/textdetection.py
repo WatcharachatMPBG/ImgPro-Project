@@ -47,10 +47,22 @@ def main():
     databook = json.load(open("dataprofile.json"))
     print (databook)
     data = []
-    data.append(subject[0])
-    data.append(address[0])
-    data.append(date[0])
-    data.append(kbdinput)
+    if len(subject) != 0:
+        data.append(subject[0])
+    else:
+        data.append("")
+    if len(address) != 0:
+        data.append(address[0])
+    else:
+        data.append("")
+    if len(date) != 0:
+        data.append(date[0])
+    else:
+        data.append("")
+    if len(kbdinput) != 0:
+        data.append(kbdinput)
+    else:
+        data.append("")
     databook.append(data)
     
     json.dump(databook, open("dataprofile.json",'w'))
