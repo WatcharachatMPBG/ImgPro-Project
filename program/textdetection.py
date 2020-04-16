@@ -45,7 +45,6 @@ def main():
     print(date)
 
     databook = json.load(open("dataprofile.json"))
-    print (databook)
     data = []
     if len(subject) != 0:
         data.append(subject[0])
