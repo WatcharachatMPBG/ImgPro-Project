@@ -9,6 +9,7 @@ import os
 import shutil
 import projectMethod as pm
 import sys
+from Levenshtein import ratio as levenshtein_distance
 
 text_file = open("filtered.txt", "wb")
 
@@ -16,7 +17,9 @@ def main():
     basetext = str((sys.argv[1]))
     comparetext = str(sys.argv[2])
     textstring = (open(basetext,encoding="utf8")).read().replace("ำ","ํา")
+    textstring = textstring.replace("แ","เเ")
     textstring2 = (open(comparetext,encoding="utf8")).read()
+    '''
     res1 = {} 
     for keys in textstring: #กรองมาคิดเฉพาะ text ไทยเท่านั้น
         if keys in "กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรฤลฦวศษสหฬอฮฯะัาำิีึืฺุู฿เแโใไๅๆ็่้๊๋์ํ๎๏๐๑๒๓๔๕๖๗๘๙๚๛":
@@ -44,6 +47,8 @@ def main():
     print("charcount = {}".format(charcount))
     print("diffcount = {}".format(diffcount))
     print("error = ",((abs(charcount - (charcount - diffcount)))/charcount)*100,'%')
+    '''
+    print(levenshtein_distance(textstring,textstring2))
     text_file.write(textstring.encode("utf8"))
     text_file.close()
 
