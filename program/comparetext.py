@@ -18,7 +18,11 @@ def main():
     comparetext = str(sys.argv[2])
     textstring = (open(basetext,encoding="utf8")).read().replace("ำ","ํา")
     textstring = textstring.replace("แ","เเ")
+    textstring = textstring.replace(" ","")
+    textstring = textstring.replace("\n","")
+    textstring = textstring.replace("\t","")
     textstring2 = (open(comparetext,encoding="utf8")).read()
+    textstring2 = textstring2.replace("\n","")
     '''
     res1 = {} 
     for keys in textstring: #กรองมาคิดเฉพาะ text ไทยเท่านั้น
